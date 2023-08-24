@@ -19,6 +19,10 @@ import traceback
 from langchain.llms.vertexai import VertexAI
 from langchain.embeddings.vertexai import VertexAIEmbeddings
 
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 answer_prefix_tokens=["FINAL", "ANSWER"]
 if os.path.exists('./chroma'):
     shutil.rmtree("./chroma")

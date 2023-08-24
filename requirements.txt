@@ -96,6 +96,7 @@ python-graphql-client==0.4.3
 python-socketio==5.8.0
 pytz==2023.3
 PyYAML==6.0.1
+pysqlite3-binary
 regex==2023.8.8
 requests==2.31.0
 rsa==4.9
