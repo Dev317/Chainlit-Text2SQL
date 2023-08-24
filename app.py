@@ -19,7 +19,6 @@ import traceback
 from langchain.llms.vertexai import VertexAI
 from langchain.embeddings.vertexai import VertexAIEmbeddings
 
-
 answer_prefix_tokens=["FINAL", "ANSWER"]
 if os.path.exists('./chroma'):
     shutil.rmtree("./chroma")
@@ -95,7 +94,8 @@ async def process_file(file):
     data_str = [doc.page_content for doc in data]
 
     # Create a Chroma vector store
-    embeddings = VertexAIEmbeddings()
+    # embeddings = VertexAIEmbeddings()
+    embeddings = OpenAIEmbeddings()
     return await cl.make_async(Chroma.from_texts)(
         data_str, embeddings, metadatas=metadatas, persist_directory='./chroma'
     )
@@ -141,9 +141,9 @@ Question: ```{question}```
 
 Answer:
 """
-
-    LLM = VertexAI(model='codechat-bison',
-                   max_output_tokens=2048)
+    # LLM = VertexAI(model='codechat-bison',
+    #                max_output_tokens=2048)
+    LLM = ChatOpenAI(model='gpt-3.5-turbo-16k', max_tokens=16000, temperature=0.5)
     CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(condense_question_template)
     QA_PROMPT = PromptTemplate(template=qa_template, input_variables=["question", "context"])
     question_generator = LLMChain(llm=LLM,
