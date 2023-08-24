@@ -27,8 +27,6 @@ answer_prefix_tokens=["FINAL", "ANSWER"]
 if os.path.exists('./chroma'):
     shutil.rmtree("./chroma")
 
-feedback_flag = False
-
 class CustomStuffDocumentsChainHandler(AsyncCallbackHandler):
     async def on_retriever_end(
         self,
@@ -101,7 +99,7 @@ async def process_file(file):
     # embeddings = VertexAIEmbeddings()
     embeddings = OpenAIEmbeddings()
     return await cl.make_async(Chroma.from_texts)(
-        data_str, embeddings, metadatas=metadatas, persist_directory='./chroma'
+        data_str, embeddings, metadatas=metadatas
     )
 
 async def get_chain(docsearch):
@@ -116,38 +114,25 @@ Standalone question:"""
 
     qa_template = """
 You're an AI assistant specializing in data analysis with Google SQL.
-When providing responses, strive to exhibit friendliness and adopt a conversational tone, similar to how a friend or tutor would communicate.
-
-When asked about your capabilities, provide a general overview of your ability to assist with data analysis tasks using Google SQL, instead of performing specific SQL queries.
-
 Based on the question provided, if it pertains to data analysis or Google SQL tasks, generate SQL code that is compatible with the Google SQL environment.
-Additionally, offer a brief explanation about how you arrived at the Google SQL code. If the required column isn't explicitly stated in the context, suggest an alternative using available columns,
-but do not assume the existence of any columns that are not mentioned. Also, do not modify the database in any way (no insert, update, or delete operations).
-You are only allowed to query the database. 
-
-Do use the data below that is provided to generate accurate Google SQL. You are not meant to use only these rows to answer questions - they are meant as a way of telling you about the column data type and schema of the table.
+Additionally, offer a brief explanation about how you arrived at the Google SQL code.
+Do not create undefined columns. You are only allowed to query the database.
+Do use the data below that is provided to generate accurate Google SQL. These rows are meant as a way of telling you about the column data type and schema of the table.
 {context}
 
-
 **You are only required to write one SQL query per question.**
-
 If the question or context does not clearly involve Google SQL or data analysis tasks, respond appropriately without generating Google SQL queries.
-
 When the user expresses gratitude or says "Thanks", interpret it as a signal to conclude the conversation. Respond with an appropriate closing statement without generating further SQL queries.
-
 If you don't know the answer, simply state, "I'm sorry, I don't know the answer to your question."
-
 Write your response in markdown format and code in ```sql```.
-
-Do use the DDL schema from the question to generate accurate Google SQL. Use the correct data type for the SQL based on the schema.
-
+Do use the DDL schema from the question to generate accurate Google SQL.
 Question: ```{question}```
 
 Answer:
 """
     # LLM = VertexAI(model='codechat-bison',
     #                max_output_tokens=2048)
-    LLM = ChatOpenAI(model='gpt-3.5-turbo-16k', max_tokens=16000, temperature=0.5)
+    LLM = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0.5)
     CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(condense_question_template)
     QA_PROMPT = PromptTemplate(template=qa_template, input_variables=["question", "context"])
     question_generator = LLMChain(llm=LLM,
@@ -213,7 +198,7 @@ async def init():
     sql = sql_file.content.decode("utf-8")
     cl.user_session.set("sql", sql)
 
-    processing_sql_message = cl.Message(content=f"Processing sql file").send()
+    processing_sql_message = cl.Message(content=f"Processing sql file")
     await processing_sql_message.send()
 
     sql_msg = cl.Message(content=sql, language='sql')

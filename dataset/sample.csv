@@ -1,0 +1,21 @@
+age,workclass,functional_weight,education,education_num,marital_status,occupation,relationship,race,sex,capital_gain,capital_loss,hours_per_week,native_country,income_bracket
+39, Private,297847, 9th,5, Married-civ-spouse, Other-service, Wife, Black, Female,3411,0,34, United-States, <=50K
+77, Private,344425, 9th,5, Married-civ-spouse, Priv-house-serv, Wife, Black, Female,0,0,10, United-States, <=50K
+38, Private,131461, 9th,5, Married-civ-spouse, Other-service, Wife, Black, Female,0,0,24, Haiti, <=50K
+28, Private,190350, 9th,5, Married-civ-spouse, Protective-serv, Wife, Black, Female,0,0,40, United-States, <=50K
+37, Private,171090, 9th,5, Married-civ-spouse, Machine-op-inspct, Wife, Black, Female,0,0,48, United-States, <=50K
+35, ?,374716, 9th,5, Married-civ-spouse, ?, Wife, White, Female,0,0,35, United-States, <=50K
+45, Private,178215, 9th,5, Married-civ-spouse, Machine-op-inspct, Wife, White, Female,0,0,40, United-States, >50K
+55, Private,176012, 9th,5, Married-civ-spouse, Tech-support, Wife, White, Female,0,0,23, United-States, <=50K
+27, Private,109611, 9th,5, Married-civ-spouse, Machine-op-inspct, Wife, White, Female,0,0,37, Portugal, <=50K
+31, Private,86958, 9th,5, Married-civ-spouse, Exec-managerial, Wife, White, Female,0,0,40, United-States, <=50K
+30, Private,61272, 9th,5, Married-civ-spouse, Machine-op-inspct, Wife, White, Female,0,0,40, Portugal, <=50K
+28, Private,209801, 9th,5, Married-civ-spouse, Machine-op-inspct, Wife, White, Female,0,0,40, United-States, <=50K
+46, Private,184883, 9th,5, Married-civ-spouse, Machine-op-inspct, Wife, White, Female,0,0,40, United-States, <=50K
+70, Private,216390, 9th,5, Married-civ-spouse, Machine-op-inspct, Wife, White, Female,2653,0,40, United-States, <=50K
+31, Private,399052, 9th,5, Married-civ-spouse, Farming-fishing, Wife, White, Female,0,0,42, United-States, <=50K
+40, Local-gov,183096, 9th,5, Married-civ-spouse, Other-service, Wife, White, Female,0,0,40, Yugoslavia, >50K
+52, Local-gov,330799, 9th,5, Married-civ-spouse, Other-service, Wife, White, Female,0,0,40, United-States, <=50K
+46, Self-emp-inc,161386, 9th,5, Married-civ-spouse, Adm-clerical, Wife, White, Female,0,0,50, United-States, <=50K
+41, Self-emp-inc,299813, 9th,5, Married-civ-spouse, Sales, Wife, White, Female,0,0,70, Dominican-Republic, <=50K
+41, ?,217921, 9th,5, Married-civ-spouse, ?, Wife, Asian-Pac-Islander, Female,0,0,40, Hong, <=50K
