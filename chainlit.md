@@ -1,14 +1,16 @@
-# Welcome to Chainlit! 🚀🤖
+# 🐧 PenguinChat
+PenguinChat is a user-friendly chatbot that allows you to interact with BigQuery data using natural language queries. Key in your questions, and PenguinChat will generate the appropriate SQL query and return the data you need.
 
-Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
+## Features
+- **Conversational AI**: Harnesses LLMs to translate natural language into precise SQL queries.
+- **Conversational Memory**: Retains context for interactive, dynamic responses.
+- **BigQuery Integration**: Offers seamless, real-time data insights straight from your BigQuery datalake.
+- **Interactive User Interface**: Transforms data querying into an engaging conversation, complete with a chat reset option.
 
-## Useful Links 🔗
+### Example
+Here are some sample queries you can try with **PenguinChat**:
 
-- **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
-- **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/ZThrUxbAYw) to ask questions, share your projects, and connect with other developers! 💬
-
-We can't wait to see what you create with Chainlit! Happy coding! 💻😊
-
-## Welcome screen
-
-To modify the welcome screen, edit the `chainlit.md` file at the root of your project. If you do not want a welcome screen, just leave this file empty.
+- Show me the sql to get ...
+- What is the sql for total ...?
+- Provide me a sql to show the relationship between ...
+- Tell me the sql that reveals ...?
