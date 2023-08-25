@@ -18,10 +18,21 @@ from chainlit.input_widget import TextInput
 import traceback
 from langchain.llms.vertexai import VertexAI
 from langchain.embeddings.vertexai import VertexAIEmbeddings
+from chainlit.input_widget import Slider
 
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# __import__('pysqlite3')
+# import sys
+# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+from langfuse.callback import CallbackHandler
+from langfuse import Langfuse
+from langfuse.model import CreateScore
+from langfuse.model import CreateScoreRequest
+
+ENV_HOST = "https://cloud.langfuse.com"
+ENV_SECRET_KEY = "sk-lf-c3ecd334-c979-47f4-804d-2de38ed738d1"
+ENV_PUBLIC_KEY = "pk-lf-98a3f2b4-1e6e-4dc0-9825-d9d7f2b1b7f0"
+
+handler = CallbackHandler(ENV_PUBLIC_KEY, ENV_SECRET_KEY, ENV_HOST)
 
 answer_prefix_tokens=["FINAL", "ANSWER"]
 if os.path.exists('./chroma'):
@@ -160,7 +171,17 @@ Answer:
 async def init():
     await cl.ChatSettings(
         [
-            TextInput(id="feedback_input", label="Feedback Input"),
+            TextInput(id="feedback_input", label="Feedback Input", tooltip="Provide feedback on current LLM response"),
+            Slider(
+                id="score",
+                label="LLM Response Score",
+                initial=0,
+                min=-1,
+                max=1,
+                step=0.1,
+                description="Score for an LLM response",
+                tooltip="-1 is Bad, 1 is Good"
+            ),
         ]
     ).send()
 
@@ -225,7 +246,7 @@ async def main(message: str):
     try:
         result = await chain.acall({"question": qa_prompt,
                         "chat_history": history},
-                        callbacks=[cb, CustomStuffDocumentsChainHandler()])
+                        callbacks=[cb, handler])
 
         answer = result["answer"]
         source_documents = result['source_documents']
@@ -255,15 +276,37 @@ async def main(message: str):
 
         cl.user_session.set('user_question', message)
         cl.user_session.set('llm_response', result["answer"])
+        handler.langfuse.flush()
 
     except Exception as ex:
-        print(f"Error: {str(ex)}")
-        print(f"{traceback.format_exc()}")
+        logging.error(f"Error: {str(ex)}")
+        logging.debug(f"{traceback.format_exc()}")
 
 
 @cl.on_settings_update
 def log_feedback(settings):
+    feedback = ""
+    score = 0
     if "feedback_input" in settings:
         feedback = settings["feedback_input"]
         logging.info(f"Feedback:\n\nUser Question:{cl.user_session.get('user_question', '')}\n\nLLM Response:{cl.user_session.get('llm_response', '')}\n\nUser Feedback:{feedback}")
+
+    if "score" in settings:
+        traceId = handler.get_trace_id()
+
+        # Add score, e.g. via the Python SDK
+        score = settings["score"]
+        logging.info(f"Response score: {score}")
+
+    langfuse = Langfuse(ENV_PUBLIC_KEY, ENV_SECRET_KEY, ENV_HOST)
+    trace = langfuse.score(
+        CreateScoreRequest(
+            traceId=traceId,
+            name="user-feedback",
+            value=score,
+            comment=feedback
+        )
+    )
+
+    logging.info(f"Send score: {trace}")
 
