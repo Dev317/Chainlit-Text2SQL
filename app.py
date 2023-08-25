@@ -20,17 +20,17 @@ from langchain.llms.vertexai import VertexAI
 from langchain.embeddings.vertexai import VertexAIEmbeddings
 from chainlit.input_widget import Slider
 
-# __import__('pysqlite3')
-# import sys
-# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 from langfuse.callback import CallbackHandler
 from langfuse import Langfuse
 from langfuse.model import CreateScore
 from langfuse.model import CreateScoreRequest
 
-ENV_HOST = "https://cloud.langfuse.com"
-ENV_SECRET_KEY = "sk-lf-c3ecd334-c979-47f4-804d-2de38ed738d1"
-ENV_PUBLIC_KEY = "pk-lf-98a3f2b4-1e6e-4dc0-9825-d9d7f2b1b7f0"
+ENV_HOST = os.getenv("LANGFUSE_HOST")
+ENV_SECRET_KEY = os.getenv("LANGFUSE_SECRET_KEY")
+ENV_PUBLIC_KEY = os.getenv("LANGFUSE_PUBLIC_KEY")
 
 handler = CallbackHandler(ENV_PUBLIC_KEY, ENV_SECRET_KEY, ENV_HOST)
 
